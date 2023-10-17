@@ -1,5 +1,3 @@
-# vnc-browser
-
 # VNC-Browser 
 # A Lightweight Web Browsing Environment in Docker with VNC Access
 
