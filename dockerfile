@@ -34,5 +34,5 @@ RUN chmod +x /entrypoint.sh
 EXPOSE 5901 6901
 
 # Set tini as the entrypoint and the custom script as the command
-ENTRYPOINT ["/sbin/tini", "--"]
+ENTRYPOINT ["/tini", "--"]
 CMD ["/entrypoint.sh"]
