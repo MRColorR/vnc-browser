@@ -2,22 +2,23 @@
 FROM alpine:edge
 
 # Set environment variables
-ENV DISPLAY=:0
-ENV VNC_RESOLUTION=1024x768
-ENV STARTING_WEBSITE_URL=https://www.google.com
+ENV DISPLAY=:0 \
+    VNC_RESOLUTION=1024x768 \
+    STARTING_WEBSITE_URL=https://www.google.com
 
 # Install necessary packages and setup noVNC
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
     apk update && \
+    apk upgrade && \
     apk add --no-cache \
     xvfb \
     x11vnc \
+    tini \
+    supervisor \
     bash \
     fluxbox \
     firefox \
-    tini \
-    supervisor \
     novnc \
     websockify && \
     ln -s /usr/share/novnc/vnc_lite.html /usr/share/novnc/index.html
