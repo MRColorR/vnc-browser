@@ -41,6 +41,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/reposit
     websockify \
     fluxbox \
     xterm \
+    nano \
     firefox && \
     ln -s /usr/share/novnc/vnc_lite.html /usr/share/novnc/index.html 
 

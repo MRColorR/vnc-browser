@@ -42,6 +42,7 @@ RUN set -ex; \
     websockify \
     fluxbox \
     xterm \
+    nano \
     chromium && \
     apt autoremove --purge -y && \
     apt clean && \
