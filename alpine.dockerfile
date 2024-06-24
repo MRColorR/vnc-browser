@@ -41,7 +41,8 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/reposit
     websockify \
     fluxbox \
     xterm \
-    firefox
+    firefox && \
+    ln -s /usr/share/novnc/vnc_lite.html /usr/share/novnc/index.html 
 
 # Create necessary directories for supervisor
 RUN mkdir -p /etc/supervisor.d /app/conf.d
