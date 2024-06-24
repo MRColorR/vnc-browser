@@ -12,6 +12,7 @@ ARG DEF_LANG=en_US.UTF-8
 ARG DEF_LC_ALL=C.UTF-8
 ARG DEF_VNC_PORT=5900
 ARG DEF_NOVNC_WEBSOCKIFY_PORT=6080
+ARG DEF_CUSTOMIZE=false
 
 # Set environment variables with default values
 ENV VNC_SCREEN=${DEF_VNC_SCREEN} \
@@ -23,7 +24,8 @@ ENV VNC_SCREEN=${DEF_VNC_SCREEN} \
     LANG=${DEF_LANG} \
     LC_ALL=${DEF_LC_ALL} \
     VNC_PORT=${DEF_VNC_PORT} \
-    NOVNC_WEBSOCKIFY_PORT=${DEF_NOVNC_WEBSOCKIFY_PORT}
+    NOVNC_WEBSOCKIFY_PORT=${DEF_NOVNC_WEBSOCKIFY_PORT} \
+    CUSTOMIZE=${DEF_CUSTOMIZE}
 
 # Install necessary packages and setup noVNC
 RUN set -ex; \
@@ -49,14 +51,16 @@ RUN mkdir -p /etc/supervisor.d /app/conf.d
 # Copy configuration files
 COPY supervisord.conf /etc/supervisor.d/supervisord.conf
 COPY conf.d/ /app/conf.d/
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY base_entrypoint.sh /usr/local/bin/base_entrypoint.sh
+COPY customizable_entrypoint.sh /usr/local/bin/customizable_entrypoint.sh
 
-# Make the entrypoint script executable
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Make the entrypoint scripts executable
+RUN chmod +x /usr/local/bin/base_entrypoint.sh
+RUN chmod +x /usr/local/bin/customizable_entrypoint.sh
 
 # Expose the standard VNC and noVNC ports
 EXPOSE ${VNC_PORT} ${NOVNC_WEBSOCKIFY_PORT}
 
 # Set tini as the entrypoint and the custom script as the command
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["/usr/local/bin/entrypoint.sh"]
+CMD ["/usr/local/bin/customizable_entrypoint.sh"]
