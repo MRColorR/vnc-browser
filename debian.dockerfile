@@ -39,8 +39,9 @@ RUN set -ex; \
     xvfb \
     x11vnc \
     novnc \
-    fluxbox \
     websockify \
+    fluxbox \
+    xterm \
     chromium && \
     apt autoremove --purge -y && \
     apt clean && \

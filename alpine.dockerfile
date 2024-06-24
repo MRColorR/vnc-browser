@@ -38,8 +38,8 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/reposit
     xvfb \
     x11vnc \
     novnc \
-    fluxbox \
     websockify \
+    fluxbox \
     xterm \
     firefox
 
