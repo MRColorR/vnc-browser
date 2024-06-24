@@ -1,21 +1,29 @@
 #!/usr/bin/env bash
-
-# If VNC_PASSWORD is not set, use a default password
-: ${VNC_PASSWORD:=password}
-echo "Current vnc password is: ${VNC_PASSWORD}"
+set -ex
 
 # Store the password
 if [ "$VNC_PASSWORD" ]; then
     sed -i "s/^\(command.*x11vnc.*\)$/\1 -passwd '$VNC_PASSWORD'/" /etc/supervisord.conf
 fi
 
-# If VNC_RESOLUTION is not set, use a default resolution
-: ${VNC_RESOLUTION:=1280x1024}
-echo "Current VNC resolution is: ${VNC_RESOLUTION}"
+# Print current VNC info
+echo "Current VNC info:"
+echo "-----------------"
+echo "VNC Screen: ${VNC_SCREEN}"
+echo "VNC Display is: ${VNC_DISPLAY}"
+echo "VNC resolution is: ${VNC_RESOLUTION}"
+echo "VNC password is: ${VNC_PASSWORD}"
 
-# If STARTING_WEBSITE_URL is not set, use a default website
-: ${STARTING_WEBSITE_URL:=https://www.google.com}
-echo "Current starting website is: ${STARTING_WEBSITE_URL}"
+# Print other container's info: like     DEBIAN_FRONTEND=${DEF_DEBIAN_FRONTEND} \    LANG=${DEF_LANG} \    LANGUAGE=${DEF_LANGUAGE} \    LC_ALL=${DEF_LC_ALL}
+echo "-----------------"
+echo "Other Info:"
+echo "-----------------"
+echo "Debian Frontend: ${DEF_DEBIAN_FRONTEND}"
+echo "Lang: ${DEF_LANG}"
+echo "LC All: ${DEF_LC_ALL}"
+echo "Default website URL: ${STARTING_WEBSITE_URL}"
+echo "-----------------"
 
 # Start Supervisor
+echo "Starting Supervisor"
 exec supervisord -c /etc/supervisord.conf
