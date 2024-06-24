@@ -10,22 +10,25 @@ fi
 echo "Current VNC info:"
 echo "-----------------"
 echo "VNC Screen: ${VNC_SCREEN}"
-echo "VNC Display is: ${VNC_DISPLAY}"
-echo "VNC resolution is: ${VNC_RESOLUTION}"
-echo "VNC password is: ${VNC_PASSWORD}"
+echo "VNC Display: ${VNC_DISPLAY}"
+echo "VNC resolution: ${VNC_RESOLUTION}"
+echo "VNC password: ${VNC_PASSWORD}"
 echo "VNC Port: ${VNC_PORT}"
 echo "NOVNC Websockify Port: ${NOVNC_WEBSOCKIFY_PORT}"
 
-# Print other container's info: like     DEBIAN_FRONTEND=${DEF_DEBIAN_FRONTEND} \    LANG=${DEF_LANG} \    LANGUAGE=${DEF_LANGUAGE} \    LC_ALL=${DEF_LC_ALL}
+# Print other container's info
 echo "-----------------"
 echo "Other Info:"
 echo "-----------------"
-echo "Debian Frontend: ${DEF_DEBIAN_FRONTEND}"
-echo "Lang: ${DEF_LANG}"
-echo "LC All: ${DEF_LC_ALL}"
+echo "Debian Frontend: ${DEBIAN_FRONTEND}"
+echo "Lang: ${LANG}"
+echo "LC All: ${LC_ALL}"
 echo "Homepage website URL: ${STARTING_WEBSITE_URL}"
 echo "-----------------"
 
+# Set VNC resolution
+export DISPLAY=:${VNC_DISPLAY}.${VNC_SCREEN}
+Xvfb :${VNC_DISPLAY} -screen ${VNC_SCREEN} ${VNC_RESOLUTION}x24 &
+
 # Start Supervisor
-echo "Starting Supervisor"
-exec supervisord -c /etc/supervisord.conf
+exec supervisord -c /etc/supervisor.d/supervisord.conf
