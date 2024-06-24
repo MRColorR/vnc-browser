@@ -8,7 +8,6 @@ ARG DEF_VNC_RESOLUTION=1280x720
 ARG DEF_STARTING_WEBSITE_URL=https://www.google.com
 ARG DEF_RUN_XTERM=true
 
-# Set environment variables
 # Set environment variables with default values
 ENV VNC_DISPLAY=${DEF_VNC_DISPLAY} \
     VNC_PASSWORD=${DEF_VNC_PASSWORD} \
@@ -17,19 +16,18 @@ ENV VNC_DISPLAY=${DEF_VNC_DISPLAY} \
     RUN_XTERM=${DEF_RUN_XTERM}
 
 # Install necessary packages and setup noVNC
-RUN set -ex; \
-    echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
     apk update && \
     apk upgrade && \
     apk add --no-cache \
-    tini \
-    supervisor \
     xvfb \
     x11vnc \
+    tini \
+    supervisor \
     bash \
     fluxbox \
-    chromium \
+    firefox \
     novnc \
     websockify && \
     ln -s /usr/share/novnc/vnc_lite.html /usr/share/novnc/index.html
