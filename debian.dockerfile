@@ -9,19 +9,21 @@ ARG DEF_VNC_PASSWORD=money4band
 ARG DEF_STARTING_WEBSITE_URL=https://www.google.com
 ARG DEF_DEBIAN_FRONTEND=noninteractive
 ARG DEF_LANG=en_US.UTF-8
-ARG DEF_LANGUAGE=en_US.UTF-8
 ARG DEF_LC_ALL=C.UTF-8
+ARG DEF_VNC_PORT=5900
+ARG DEF_WEBSOCKIFY_PORT=6080
 
 # Set environment variables with default values
 ENV VNC_SCREEN=${DEF_VNC_SCREEN} \
     VNC_DISPLAY=${DEF_VNC_DISPLAY} \
     VNC_RESOLUTION=${DEF_VNC_RESOLUTION} \
     VNC_PASSWORD=${DEF_VNC_PASSWORD} \
+    VNC_PORT=${DEF_VNC_PORT} \
+    WEBSOCKIFY_PORT=${DEF_WEBSOCKIFY_PORT} \
     STARTING_WEBSITE_URL=${DEF_STARTING_WEBSITE_URL} \
     DEBIAN_FRONTEND=${DEF_DEBIAN_FRONTEND} \
     LANG=${DEF_LANG} \
-    LANGUAGE=${DEF_LANGUAGE} \
-    LC_ALL=${DEF_LC_ALL}
+    LC_ALL=${DEF_LC_ALL} 
 
 # Install necessary packages and setup noVNC
 RUN set -ex; \
@@ -35,6 +37,7 @@ RUN set -ex; \
     x11vnc \
     novnc \
     fluxbox \
+    websockify \
     chromium && \
     ln -s /usr/share/novnc/vnc_lite.html /usr/share/novnc/index.html && \
     apt autoremove --purge -y && \
