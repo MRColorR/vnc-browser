@@ -12,6 +12,7 @@ ARG DEF_STARTING_WEBSITE_URL=https://www.google.com
 ARG DEF_LANG=en_US.UTF-8
 ARG DEF_LC_ALL=C.UTF-8
 ARG DEF_CUSTOMIZE=false
+ARG DEF_AUTO_START_BROWSER=true
 
 # Set environment variables with default values
 ENV DISPLAY=:${DEF_VNC_DISPLAY}.${DEF_VNC_SCREEN} \
@@ -24,7 +25,8 @@ ENV DISPLAY=:${DEF_VNC_DISPLAY}.${DEF_VNC_SCREEN} \
     STARTING_WEBSITE_URL=${DEF_STARTING_WEBSITE_URL} \
     LANG=${DEF_LANG} \
     LC_ALL=${DEF_LC_ALL} \
-    CUSTOMIZE=${DEF_CUSTOMIZE}
+    CUSTOMIZE=${DEF_CUSTOMIZE} \
+    AUTO_START_BROWSER=${DEF_AUTO_START_BROWSER}
 
 # Install necessary packages and setup noVNC
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \

@@ -12,6 +12,7 @@ ARG DEF_STARTING_WEBSITE_URL=https://www.google.com
 ARG DEF_LANG=en_US.UTF-8
 ARG DEF_LC_ALL=C.UTF-8
 ARG DEF_CUSTOMIZE=false
+ARG DEF_AUTO_START_BROWSER=true
 ARG DEF_DEBIAN_FRONTEND=noninteractive
 
 # Set environment variables with default values
@@ -26,6 +27,7 @@ ENV DISPLAY=:${DEF_VNC_DISPLAY}.${DEF_VNC_SCREEN} \
     LANG=${DEF_LANG} \
     LC_ALL=${DEF_LC_ALL} \
     CUSTOMIZE=${DEF_CUSTOMIZE} \
+    AUTO_START_BROWSER=${DEF_AUTO_START_BROWSER} \
     DEBIAN_FRONTEND=${DEF_DEBIAN_FRONTEND}
 
 # Install necessary packages and setup noVNC
@@ -50,6 +52,7 @@ RUN set -ex; \
 
 # Create necessary directories for supervisor
 RUN mkdir -p /etc/supervisor.d /app/conf.d
+RUN mkdir -p /var/log/supervisor
 
 # Copy configuration files
 COPY supervisord.conf /etc/supervisor.d/supervisord.conf
