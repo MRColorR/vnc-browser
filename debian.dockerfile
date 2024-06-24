@@ -12,7 +12,6 @@ ARG DEF_LANG=en_US.UTF-8
 ARG DEF_LANGUAGE=en_US.UTF-8
 ARG DEF_LC_ALL=C.UTF-8
 
-# Set environment variables
 # Set environment variables with default values
 ENV VNC_SCREEN=${DEF_VNC_SCREEN} \
     VNC_DISPLAY=${DEF_VNC_DISPLAY} \
@@ -27,8 +26,8 @@ ENV VNC_SCREEN=${DEF_VNC_SCREEN} \
 # Install necessary packages and setup noVNC
 RUN set -ex; \
     apt update && \
-    apt full-upgrade && \
-    apt install  -qqy \
+    apt full-upgrade -qqy && \
+    apt install -qqy \
     tini \
     supervisor \
     bash \
@@ -48,14 +47,10 @@ RUN mkdir -p /etc/supervisor.d /app/conf.d
 # Copy configuration files
 COPY supervisord.conf /etc/supervisor.d/supervisord.conf
 COPY conf.d/ /app/conf.d/
-
-# Copy configuration files
-COPY supervisord.conf /etc/supervisord.conf
-COPY entrypoint.sh /entrypoint.sh
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # Make the entrypoint script executable
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Expose the standard VNC and noVNC ports
 EXPOSE 5900 6080
