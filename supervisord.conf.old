@@ -1,0 +1,42 @@
+[supervisord]
+nodaemon=true
+#logfile=/var/log/supervisord.log
+#pidfile=/var/log/supervisord.pid
+
+[program:xvfb]
+command=Xvfb :0 -screen 0 %(ENV_VNC_RESOLUTION)sx24
+autostart=true
+autorestart=true
+#redirect_stderr=true
+#stdout_logfile=/var/log/xvfb.log
+#stderr_logfile=/var/log/xvfb.err.log
+
+[program:x11vnc]
+command=x11vnc -xkb -noxrecord -noxfixes -noxdamage -display :0 -nopw -wait 5 -shared -permitfiletransfer -tightfilexfer -rfbport 5901 
+autostart=true
+autorestart=true
+#redirect_stderr=true
+#stdout_logfile=/var/log/x11vnc.log
+#stderr_logfile=/var/log/x11vnc.err.log
+
+[program:novnc]
+command=novnc_server --vnc localhost:5901 --listen 6901
+autostart=true
+autorestart=true
+#redirect_stderr=true
+#stdout_logfile=/var/log/novnc.log
+#stderr_logfile=/var/log/novnc.err.log
+
+[program:fluxbox]
+command=fluxbox
+#autostart=true
+autorestart=true
+
+[program:firefox]
+command=firefox %(ENV_STARTING_WEBSITE_URL)s
+autostart=true
+autorestart=true
+#user=browser
+#redirect_stderr=true
+#stdout_logfile=/var/log/firefox.log
+#stderr_logfile=/var/log/firefox.err.log
