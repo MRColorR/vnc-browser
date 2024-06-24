@@ -43,8 +43,8 @@ docker run -d -p 5900:5900 -p 6080:6080 -e STARTING_WEBSITE_URL="https://www.bin
 
 ## Available images 📦
 
-- mrcolorrain/vnc-browser:alpine (with firefox browser)
-- mrcolorrain/vnc-browser:debian (with chromium browser)
+- `mrcolorrain/vnc-browser:alpine` (with firefox browser)
+- `mrcolorrain/vnc-browser:debian` (with chromium browser)
 
 
 ---
