@@ -51,12 +51,10 @@ RUN mkdir -p /etc/supervisor.d /app/conf.d
 # Copy configuration files
 COPY supervisord.conf /etc/supervisor.d/supervisord.conf
 COPY conf.d/ /app/conf.d/
-COPY base_entrypoint.sh /usr/local/bin/base_entrypoint.sh
-COPY customizable_entrypoint.sh /usr/local/bin/customizable_entrypoint.sh
+COPY base_entrypoint.sh customizable_entrypoint.sh /usr/local/bin/
 
 # Make the entrypoint scripts executable
-RUN chmod +x /usr/local/bin/base_entrypoint.sh
-RUN chmod +x /usr/local/bin/customizable_entrypoint.sh
+RUN chmod +x /usr/local/bin/base_entrypoint.sh /usr/local/bin/customizable_entrypoint.sh
 
 # Expose the standard VNC and noVNC ports
 EXPOSE ${VNC_PORT} ${NOVNC_WEBSOCKIFY_PORT}
