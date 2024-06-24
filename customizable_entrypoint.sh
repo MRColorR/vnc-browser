@@ -20,6 +20,9 @@ if [ "$CUSTOMIZE" = "true" ]; then
     # Example: Start a Python script
     # echo "Starting the Python script..."
     # python3 /app/your_python_script.py
+
+    #### ADD YOUR CUSTOM CODE HERE ####
+
 else
     echo "Customization is disabled. Running the base entry point in the foreground..."
     exec /usr/local/bin/base_entrypoint.sh
