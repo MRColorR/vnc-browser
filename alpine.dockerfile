@@ -2,18 +2,29 @@
 FROM alpine:edge
 
 # Build arguments to set environment variables at build time
-ARG DEF_VNC_DISPLAY=99
-ARG DEF_VNC_PASSWORD=money4band
+ARG DEF_VNC_SCREEN=0
+ARG DEF_VNC_DISPLAY=0
 ARG DEF_VNC_RESOLUTION=1280x720
+ARG DEF_VNC_PASSWORD=money4band
+ARG DEF_VNC_PORT=5900
+ARG DEF_NOVNC_WEBSOCKIFY_PORT=6080
 ARG DEF_STARTING_WEBSITE_URL=https://www.google.com
-ARG DEF_RUN_XTERM=true
+ARG DEF_LANG=en_US.UTF-8
+ARG DEF_LC_ALL=C.UTF-8
+ARG DEF_CUSTOMIZE=false
 
 # Set environment variables with default values
-ENV VNC_DISPLAY=${DEF_VNC_DISPLAY} \
-    VNC_PASSWORD=${DEF_VNC_PASSWORD} \
+ENV DISPLAY=:${DEF_VNC_DISPLAY}.${DEF_VNC_SCREEN} \
+    VNC_SCREEN=${DEF_VNC_SCREEN} \
+    VNC_DISPLAY=${DEF_VNC_DISPLAY} \
     VNC_RESOLUTION=${DEF_VNC_RESOLUTION} \
+    VNC_PASSWORD=${DEF_VNC_PASSWORD} \
+    VNC_PORT=${DEF_VNC_PORT} \
+    NOVNC_WEBSOCKIFY_PORT=${DEF_NOVNC_WEBSOCKIFY_PORT} \
     STARTING_WEBSITE_URL=${DEF_STARTING_WEBSITE_URL} \
-    RUN_XTERM=${DEF_RUN_XTERM}
+    # LANG=${DEF_LANG} \
+    # LC_ALL=${DEF_LC_ALL} \
+    CUSTOMIZE=${DEF_CUSTOMIZE}
 
 # Install necessary packages and setup noVNC
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
@@ -21,27 +32,32 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/reposit
     apk update && \
     apk upgrade && \
     apk add --no-cache \
-    xvfb \
-    x11vnc \
     tini \
     supervisor \
     bash \
-    fluxbox \
-    firefox \
+    xvfb \
+    x11vnc \
     novnc \
-    websockify && \
-    ln -s /usr/share/novnc/vnc_lite.html /usr/share/novnc/index.html
+    fluxbox \
+    websockify \
+    xterm \
+    firefox
+
+# Create necessary directories for supervisor
+RUN mkdir -p /etc/supervisor.d /app/conf.d
+RUN mkdir -p /var/log/supervisor
 
 # Copy configuration files
-COPY supervisord.conf /etc/supervisord.conf
-COPY entrypoint.sh /entrypoint.sh
+COPY supervisord.conf /etc/supervisor.d/supervisord.conf
+COPY conf.d/ /app/conf.d/
+COPY base_entrypoint.sh customizable_entrypoint.sh /usr/local/bin/
 
-# Make the entrypoint script executable
-RUN chmod +x /entrypoint.sh
+# Make the entrypoint scripts executable
+RUN chmod +x /usr/local/bin/base_entrypoint.sh /usr/local/bin/customizable_entrypoint.sh
 
-# Expose VNC and noVNC ports
-EXPOSE 5901 6901
+# Expose the standard VNC and noVNC ports
+EXPOSE ${VNC_PORT} ${NOVNC_WEBSOCKIFY_PORT}
 
 # Set tini as the entrypoint and the custom script as the command
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["/entrypoint.sh"]
+CMD ["/usr/local/bin/customizable_entrypoint.sh"]
