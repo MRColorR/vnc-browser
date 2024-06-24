@@ -56,7 +56,7 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Expose the standard VNC and noVNC ports
-EXPOSE 5900 6080
+EXPOSE ${VNC_PORT} ${NOVNC_WEBSOCKIFY_PORT}
 
 # Set tini as the entrypoint and the custom script as the command
 ENTRYPOINT ["/sbin/tini", "--"]
