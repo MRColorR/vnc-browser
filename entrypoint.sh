@@ -26,9 +26,6 @@ echo "LC All: ${LC_ALL}"
 echo "Homepage website URL: ${STARTING_WEBSITE_URL}"
 echo "-----------------"
 
-# Set VNC resolution
-export DISPLAY=:${VNC_DISPLAY}.${VNC_SCREEN}
-Xvfb :${VNC_DISPLAY} -screen ${VNC_SCREEN} ${VNC_RESOLUTION}x24 &
 
 # Start Supervisor
 exec supervisord -c /etc/supervisor.d/supervisord.conf
