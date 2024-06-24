@@ -24,7 +24,7 @@ This Docker image encapsulates a lightweight, VNC-accessible web browsing enviro
 - Basic knowledge of Docker and containerization.
 
 ### Pull & Run :arrow_forward::
-- Pull & Run the Image: `docker run -d -p 5900:5900 -p 6080:6080 mrcolorrain/vnc-browser`
+- Pull & Run the Image: `docker run -d -p 5900:5900 -p 6080:6080 mrcolorrain/vnc-browser:debian`
   - Using a browser, you can connect to noVNC client on `localhost:6080` or from everywhere if properly configured using `HOSTIP:6080`
   - Using a VNC Client you can connect to  `localhost:5900` or from everywhere if properly configured using `HOSTIP:5900`
 
@@ -38,8 +38,13 @@ You can customize the settings of the Docker container by passing environment va
 
 - Example:
 ```sh
-docker run -d -p 5900:5900 -p 6080:6080 -e STARTING_WEBSITE_URL="https://www.bing.com" -e VNC_PASSWORD="mypassword" -e VNC_RESOLUTION="1920x1080" -e AUTO_START_BROWSER=true -e AUTO_START_XTERM=true mrcolorrain/vnc-browser
+docker run -d -p 5900:5900 -p 6080:6080 -e STARTING_WEBSITE_URL="https://www.bing.com" -e VNC_PASSWORD="mypassword" -e VNC_RESOLUTION="1920x1080" -e AUTO_START_BROWSER=true -e AUTO_START_XTERM=true mrcolorrain/vnc-browser:alpine
 ```
+
+## Available images 📦
+
+- mrcolorrain/vnc-browser:alpine (with firefox browser)
+- mrcolorrain/vnc-browser:debian (with chromium browser)
 
 
 ---
