@@ -26,6 +26,5 @@ echo "LC All: ${LC_ALL}"
 echo "Homepage website URL: ${STARTING_WEBSITE_URL}"
 echo "-----------------"
 
-
 # Start Supervisor
 exec supervisord -c /etc/supervisor.d/supervisord.conf
