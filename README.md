@@ -16,6 +16,11 @@ This Docker image encapsulates a lightweight, VNC-accessible web browsing enviro
 - **Customizable**: Set VNC password, initial website URL, auto-start settings for the browser and xterm via environment variables.
 - **Accessible**: Access the VNC server directly or through a browser using noVNC.
 
+## Available images 📦
+
+- `mrcolorrain/vnc-browser:alpine` (with Firefox browser)
+- `mrcolorrain/vnc-browser:debian` (with Chromium browser)
+
 ## Quick Start 🚀
 You can run it easily using its default or by passing the appropriate environment variables.
 
@@ -70,11 +75,22 @@ You can customize the settings of the Docker container by passing environment va
 docker run -d -p 5900:5900 -p 6080:6080 -e STARTING_WEBSITE_URL="https://www.bing.com" -e VNC_PASSWORD="mypassword" -e VNC_RESOLUTION="1920x1080" -e AUTO_START_BROWSER=true -e AUTO_START_XTERM=true mrcolorrain/vnc-browser:alpine
 ```
 
-## Available images 📦
+## Adding Custom Entry Points 📜
+This image allows you to add custom scripts that will be executed when the container starts, provided customization is enabled.
 
-- `mrcolorrain/vnc-browser:alpine` (with Firefox browser)
-- `mrcolorrain/vnc-browser:debian` (with Chromium browser)
-
+### Instructions for Custom Entrypoints:
+- Use this Image as a Base for Your Custom Image or Mount a Volume and Add Your Scripts to the custom entrypoints Directory:
+  - Option 1: Create a new image using this image as the base and copy your custom scripts in the custom entrypoints directory.
+  - Option 2: Mount a volume containing your custom scripts to the /app/custom_entrypoints_scripts directory.
+    - Example:`docker run -d -p 5900:5900 -p 6080:6080 -v /path/to/your/scripts:/app/custom_entrypoints_scripts -e CUSTOMIZE=true mrcolorrain/vnc-browser:debian`
+- More info on custom entrypoints:
+  - To customize the image place your .sh (bash) or .py (Python) scripts in the directory and Set the environment variable `CUSTOMIZE=true` to enable custom scripts execution.
+    - Ensure your scripts have the necessary permissions (e.g., make scripts executable).
+  - Execution Order:
+    - All scripts in this directory will be executed in alphabetical order.
+    - It's recommended to put a single bash entrypoint to keep the complexity low.
+  - Logs:
+    - The execution and output of these scripts can be reviewed in the container logs.
 
 ---
 
