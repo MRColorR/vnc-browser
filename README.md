@@ -62,6 +62,7 @@ You can customize the settings of the Docker container by passing environment va
 - `CUSTOMIZE` (default: `false`): Toggle for running custom scripts.
 - `AUTO_START_BROWSER` (default: `true`): Automatically start the browser.
 - `AUTO_START_XTERM` (default: `true`): Automatically start xterm.
+- `CUSTOM_ENTRYPOINTS_DIR` (default: `/app/custom_entrypoints_scripts`): Directory for custom entry point scripts.
 - `DEBIAN_FRONTEND` (default: `noninteractive`): Frontend setting for Debian-based installations.
 
 - Example:
