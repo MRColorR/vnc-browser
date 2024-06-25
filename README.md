@@ -75,7 +75,7 @@ You can customize the settings of the Docker container by passing environment va
 docker run -d -p 5900:5900 -p 6080:6080 -e STARTING_WEBSITE_URL="https://www.bing.com" -e VNC_PASSWORD="mypassword" -e VNC_RESOLUTION="1920x1080" -e AUTO_START_BROWSER=true -e AUTO_START_XTERM=true mrcolorrain/vnc-browser:alpine
 ```
 
-## Adding Custom Entry Points 📜
+## Adding Custom Entrypoints 📜
 This image allows you to add custom scripts that will be executed when the container starts, provided customization is enabled.
 
 ### Instructions for Custom Entrypoints:
@@ -85,7 +85,8 @@ This image allows you to add custom scripts that will be executed when the conta
     - Example:`docker run -d -p 5900:5900 -p 6080:6080 -v /path/to/your/scripts:/app/custom_entrypoints_scripts -e CUSTOMIZE=true mrcolorrain/vnc-browser:debian`
 - More info on custom entrypoints:
   - To customize the image place your .sh (bash) or .py (Python) scripts in the directory and Set the environment variable `CUSTOMIZE=true` to enable custom scripts execution.
-    - Ensure your scripts have the necessary permissions (e.g., make scripts executable).
+    - Ensure your scripts have the necessary permissions (e.g.: make scripts executable).
+    - Ensure your scripts starts with the correct shebang (e.g.: #!/bin/bash or #!/usr/bin/env python3)
   - Execution Order:
     - All scripts in this directory will be executed in alphabetical order.
     - It's recommended to put a single bash entrypoint to keep the complexity low.
