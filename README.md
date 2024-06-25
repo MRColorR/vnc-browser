@@ -16,18 +16,31 @@ This Docker image encapsulates a lightweight, VNC-accessible web browsing enviro
 - **Customizable**: Set VNC password, initial website URL, auto-start settings for the browser and xterm via environment variables.
 - **Accessible**: Access the VNC server directly or through a browser using noVNC.
 
-## Getting Started 🚥
+## Quick Start 🚀
+You can run it easily using its default or by passing the appropriate environment variables.
 
-### Prerequisites
+- ### Docker CLI 🐳
+  ```bash
+  docker run -d -p 5900:5900 -p 6080:6080 --name vnc-browser -e VNC_PASSWORD="mypassword" mrcolorrain/vnc-browser:debian
+  ```
 
-- Docker installed on your system.
-- Basic knowledge of Docker and containerization.
-
-### Pull & Run :arrow_forward::
-- Pull & Run the Image: `docker run -d -p 5900:5900 -p 6080:6080 mrcolorrain/vnc-browser:debian`
-  - Using a browser, you can connect to the noVNC client on `localhost:6080` or from everywhere if properly configured using `HOSTIP:6080`
-  - Using a VNC Client, you can connect to `localhost:5900` or from everywhere if properly configured using `HOSTIP:5900`
-
+- ### Docker Compose 🐳
+  ```yaml
+  version: "3.9"
+  services:
+    vnc-browser:
+      container_name: vnc-browser
+      image: mrcolorrain/vnc-browser:debian
+      ports:
+        - "5900:5900"
+        - "6080:6080"
+      environment:
+        VNC_PASSWORD: "mypassword"
+      restart: unless-stopped
+    ```
+After starting it then you can connect by:
+- Using a browser, you can connect to the noVNC client on `localhost:6080` or from everywhere if properly configured using `HOSTIP:6080`
+- Using a VNC Client, you can connect to `localhost:5900` or from everywhere if properly configured using `HOSTIP:5900`
 ## Customization 🎨
 You can customize the settings of the Docker container by passing environment variables during the Docker run command. All the current settings will be printed in the container logs. Here are some examples:
 - Setting the initial website URL: `STARTING_WEBSITE_URL="https://www.google.com"`
