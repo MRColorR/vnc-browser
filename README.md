@@ -1,5 +1,5 @@
 # VNC-Browser 
-A Lightweight Web Browsing Environment in Docker with VNC Access
+A Lightweight, ready to use, Web Browsing Environment in Docker with VNC Access
 
 **Leave a star ⭐ if you like this project 🙂 thank you.**
 
