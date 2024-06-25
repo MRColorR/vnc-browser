@@ -35,7 +35,7 @@ ENV DISPLAY=:${DEF_VNC_DISPLAY}.${DEF_VNC_SCREEN} \
     DEBIAN_FRONTEND=${DEF_DEBIAN_FRONTEND}
 
 # Install necessary packages and setup noVNC
-RUN set -ex; \
+RUN set -e; \
     apt update && \
     apt full-upgrade -qqy && \
     apt install -qqy \

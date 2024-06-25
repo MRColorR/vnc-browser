@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 echo "Ready to start"
 
@@ -42,7 +42,11 @@ if [ "$CUSTOMIZE" = "true" ]; then
     fi
 
     # Run all bash or Python scripts found inside custom entrypoints folder
+    echo "Looking for custom entry point scripts..."
     if [ -d "$CUSTOM_ENTRYPOINTS_DIR" ]; then
+        echo "Found custom entrypoints directory: $CUSTOM_ENTRYPOINTS_DIR"
+        echo "$(ls -la $CUSTOM_ENTRYPOINTS_DIR)"
+        # list the found scripts and run them
         for script in "$CUSTOM_ENTRYPOINTS_DIR"/*.{sh,py}; do
             if [ -f "$script" ]; then
                 echo "Running custom entry point script: $script"
