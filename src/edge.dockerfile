@@ -1,4 +1,3 @@
-# Use a minimal base image
 FROM debian:stable-slim
 
 # Build arguments
@@ -21,7 +20,7 @@ ARG DEF_AUTO_START_X11VNC=true
 ARG DEF_AUTO_START_XVFB=true
 ARG DEF_AUTO_START_NOVNC=true
 
-# Edge needs similar flags to Chrome in containers:
+# Edge browser options
 ARG DEF_BROWSER_OPTIONS=--no-sandbox\ --disable-dev-shm-usage
 
 ARG DEF_X11VNC_OPTIONS=
@@ -30,7 +29,7 @@ ARG DEF_WM_OPTIONS=
 ARG DEF_NOVNC_OPTIONS=
 ARG DEF_XTERM_OPTIONS=
 
-# Environment variables
+# Environment vars
 ENV DISPLAY=:${DEF_VNC_DISPLAY}.${DEF_VNC_SCREEN} \
     VNC_SCREEN=${DEF_VNC_SCREEN} \
     VNC_DISPLAY=${DEF_VNC_DISPLAY} \
@@ -57,7 +56,7 @@ ENV DISPLAY=:${DEF_VNC_DISPLAY}.${DEF_VNC_SCREEN} \
     NOVNC_OPTIONS=${DEF_NOVNC_OPTIONS} \
     XTERM_OPTIONS=${DEF_XTERM_OPTIONS}
 
-# Install system dependencies + Microsoft Edge
+# Install Edge + Desktop stack
 RUN set -e; \
     apt update && \
     apt install -qqy wget gnupg && \
@@ -83,21 +82,22 @@ RUN set -e; \
     rm -rf /var/lib/apt/lists/*
 
 # Directories
-RUN mkdir -p /etc/supervisor.d /app/conf.d ${DEF_CUSTOM_ENTRYPOINTS_DIR}
-RUN mkdir -p /var/log/supervisor
+RUN mkdir -p /etc/supervisor.d /app/conf.d ${DEF_CUSTOM_ENTRYPOINTS_DIR} /shell /var/log/supervisor
 
 # Copy configs
 COPY supervisord.conf /etc/supervisor.d/supervisord.conf
 COPY conf.d/ /app/conf.d/
-COPY base_entrypoint.sh customizable_entrypoint.sh /usr/local/bin/
-COPY browser_conf/edge.conf /app/conf.d/
+COPY conf.d/browsers/edge.conf /app/conf.d/
 
-# Permissions
-RUN chmod +x /usr/local/bin/base_entrypoint.sh /usr/local/bin/customizable_entrypoint.sh
+# New entrypoint system
+COPY shell/master.sh /shell/master.sh
+COPY shell/user.sh /shell/user.sh
 
-# Expose VNC + noVNC
+RUN chmod +x /shell/master.sh /shell/user.sh
+
+# Expose required ports
 EXPOSE ${VNC_PORT} ${NOVNC_WEBSOCKIFY_PORT}
 
 # Entrypoint
-ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["/usr/local/bin/customizable_entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/shell/user.sh"]
+CMD []
