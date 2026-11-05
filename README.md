@@ -1,4 +1,11 @@
-# VNC-Browser 
+# VNC-Browser
+
+<!-- Project README scaffold: https://github.com/MRColorR/project-template -->
+
+[Overview](#overview) | [Getting started](#getting-started) | [Documentation](#documentation) | [Contributing](#contributing) | [Support](#support) | [License](#license)
+
+## Overview
+
 A Lightweight, Ready-to-Use Web Browsing Environment in Docker with VNC Access
 
 **Leave a star ⭐ if you like this project 🙂 thank you.**
@@ -7,8 +14,8 @@ A Lightweight, Ready-to-Use Web Browsing Environment in Docker with VNC Access
 [![Docker Stars](https://img.shields.io/docker/stars/mrcolorrain/vnc-browser?style=flat-square&link=https://hub.docker.com/r/mrcolorrain/vnc-browser)](https://hub.docker.com/r/mrcolorrain/vnc-browser)
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MRColorR/vnc-browser/docker-ci.yml?style=flat&link=https%3A%2F%2Fgithub.com%2FMRColorR%2Fvnc-browser%2Factions)](https://github.com/MRColorR/vnc-browser/actions)
 
+<a name="info-information_source"></a>
 
-## Info :information_source:
 VNC-Browser is a minimal, customizable, Linux-based Docker image designed to provide a lightweight environment for browsing the web via VNC.
 This Docker image encapsulates a lightweight, VNC-accessible web browsing environment built on top of Debian and Alpine Linux. It packages a VNC server, noVNC for browser-based VNC access, and the Chromium and Firefox web browsers, providing a compact solution for remotely browsing the web. Whether you're looking to browse securely or need a browsing environment within a containerized setup, VNC-Browser has you covered.
 
@@ -19,12 +26,19 @@ This Docker image encapsulates a lightweight, VNC-accessible web browsing enviro
 - **Customizable**: Set VNC password, initial website URL, auto-start settings, etc. via environment variables to build custom environments (e.g. webkiosk)
 - **Accessible**: Access the VNC server directly or through a browser using noVNC.
 
-## Available images 📦
+## Getting started
+
+<a name="available-images-"></a>
+
+### Available images
 
 - `mrcolorrain/vnc-browser:alpine` (with Firefox browser)
 - `mrcolorrain/vnc-browser:debian` (with Chromium browser)
 
-## Quick Start 🚀
+<a name="quick-start-"></a>
+
+### Quick Start
+
 You can run it easily using its default or by passing the appropriate environment variables.
 
 - ### Docker CLI 🐳
@@ -49,7 +63,13 @@ You can run it easily using its default or by passing the appropriate environmen
 After starting it then you can connect by:
 - Using a browser, you can connect to the noVNC client on `localhost:6080` or from everywhere if properly configured using `HOSTIP:6080`
 - Using a VNC Client, you can connect to `localhost:5900` or from everywhere if properly configured using `HOSTIP:5900`
-## Customization 🎨
+
+## Documentation
+
+<a name="customization-"></a>
+
+### Customization
+
 You can customize the settings of the Docker container by passing environment variables during the Docker run command. All the current settings will be printed in the container logs. Here are some examples:
 - Setting the initial website URL: `STARTING_WEBSITE_URL="https://www.google.com"`
 - Setting the VNC password: `VNC_PASSWORD="mypassword"`
@@ -65,7 +85,7 @@ You can customize the settings of the Docker container by passing environment va
 - Adding command options for noVNC (websockify): `NOVNC_OPTIONS="--heartbeat=10"`
 - Adding command options for xterm: `XTERM_OPTIONS="-leftbar"`
 
-### Available Variables ⚙️
+#### Available Variables ⚙️
 | Variable               | Default                           | Description |
 |------------------------|-----------------------------------|-------------|
 | VNC_SCREEN             | 0                                 | Screen number for VNC |
@@ -97,10 +117,13 @@ You can customize the settings of the Docker container by passing environment va
 docker run -d -p 5900:5900 -p 6080:6080 -e STARTING_WEBSITE_URL="https://www.bing.com" -e VNC_PASSWORD="mypassword" -e VNC_RESOLUTION="1920x1080" -e AUTO_START_BROWSER=true -e AUTO_START_XTERM=true mrcolorrain/vnc-browser:alpine
 ```
 
-## Adding Custom Entrypoints 📜
+<a name="adding-custom-entrypoints-"></a>
+
+### Adding Custom Entrypoints
+
 This image allows you to add custom scripts that will be executed when the container starts, provided customization is enabled.
 
-### Instructions for Custom Entrypoints:
+#### Instructions for Custom Entrypoints:
 - Use this Image as a Base for Your Custom Image or Mount a Volume and Add Your Scripts to the custom entrypoints Directory:
   - Option 1: Create a new image using this image as the base and copy your custom scripts in the custom entrypoints directory.
   - Option 2: Mount a volume containing your custom scripts to the /app/custom_entrypoints_scripts directory.
@@ -117,10 +140,32 @@ This image allows you to add custom scripts that will be executed when the conta
 
 ---
 
-### :warning: Disclaimer
+## Contributing
+
+Ideas, bug reports, documentation fixes and focused changes are welcome through this repository's collaboration channels.
+
+Please include enough context to reproduce a problem or review a change.
+
+## Support
+
+Ko-fi supports Mattia / MrColorRain's work across projects.
+
+Support ongoing development, testing and documentation through [Ko-fi](https://ko-fi.com/mrcolorrain). One-time contributions and monthly memberships are welcome, and you can pledge above a tier's minimum.
+
+Your contribution helps me keep building, testing and sharing useful work. Explore the membership benefits on Ko-fi and choose the way you would like to support. Technical decisions remain independent.
+
+See the [supporters and sponsors directory](https://github.com/MRColorR/MRColorR/blob/main/SPONSORS.md) for acknowledgments.
+
+## License
+
+<a name="hash-license"></a>
+
+[GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.html)
+
+<a name="warning-disclaimer"></a>
+
+### Disclaimer
+
 This project and its artifacts are provided "as is" and without warranty of any kind.
 The author makes no warranties, express or implied, that this script is free of errors, defects, or suitable for any particular purpose.
 The author shall not be retained liable for any damages suffered by any user of this script, whether direct, indirect, incidental, consequential, or special, arising from the use of or inability to use this script or its documentation, even if the author has been advised of the possibility of such damages.
-
-## :hash: License
-[GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.html)
