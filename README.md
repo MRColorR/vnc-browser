@@ -87,6 +87,7 @@ You can customize the settings of the Docker container by passing environment va
 - Setting the initial website URL: `STARTING_WEBSITE_URL="https://www.google.com"`
 - Setting the VNC password: `VNC_PASSWORD="mypassword"`
 - Setting the resolution: `VNC_RESOLUTION="1280x720"`
+- Switch to a dark browser theme, dark xterm colors and a dark Fluxbox desktop with `-e THEME=dark` in Docker or `THEME: dark` under `environment` in Compose.
 - Enabling/disabling auto-start for the browser: `AUTO_START_BROWSER=true` or `AUTO_START_BROWSER=false`
 - Enabling/disabling auto-start for xterm: `AUTO_START_XTERM=true` or `AUTO_START_XTERM=false`
 - Enabling/disabling auto-start for window manager (fluxbox): `AUTO_START_WM=true` or `AUTO_START_WM=false`
@@ -105,6 +106,7 @@ You can customize the settings of the Docker container by passing environment va
 | VNC_DISPLAY            | 0                                 | Display number for VNC |
 | VNC_RESOLUTION         | 1280x720                          | Resolution of the VNC display |
 | VNC_PASSWORD           | money4band                        | Password for VNC access |
+| THEME                  | light                             | Theme for the browser, xterm and Fluxbox. Use `light` or `dark`. Other values, including an empty value, stop startup with an error. |
 | VNC_PORT               | 5900                              | Port for VNC connections |
 | NOVNC_WEBSOCKIFY_PORT  | 6080                              | Port for noVNC web access |
 | STARTING_WEBSITE_URL   | https://www.google.com            | Initial website URL opened in the browser if auto startup is true |

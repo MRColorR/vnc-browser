@@ -73,12 +73,14 @@ jobs:
           context: .
           file: ${{ matrix.dockerfile }}
           platforms: ${{ env.TEST_PLATFORM }}
+          pull: true
+          build-args: PACKAGE_REFRESH=${{ github.run_id }}-${{ github.run_attempt }}
           push: false
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=${{ matrix.variant }}
+          cache-to: type=gha,scope=${{ matrix.variant }},mode=max
 
       - name: Test startup, shutdown and profile persistence
         run: |
@@ -92,8 +94,10 @@ jobs:
           context: .
           file: ${{ matrix.dockerfile }}
           platforms: ${{ env.PLATFORMS }}
+          pull: true
+          build-args: PACKAGE_REFRESH=${{ github.run_id }}-${{ github.run_attempt }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=${{ matrix.variant }}
+          cache-to: type=gha,scope=${{ matrix.variant }},mode=max

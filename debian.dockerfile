@@ -52,6 +52,7 @@ ENV DISPLAY=:${DEF_VNC_DISPLAY}.${DEF_VNC_SCREEN} \
     XTERM_OPTIONS=${DEF_XTERM_OPTIONS}
 
 # Install necessary packages and setup noVNC
+ARG PACKAGE_REFRESH
 RUN set -e; \
     apt update && \
     apt full-upgrade -qqy && \

@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+case "${THEME-light}" in
+    light|dark) ;;
+    *)
+        printf 'Invalid THEME: %q. Expected light or dark.\n' "$THEME" >&2
+        exit 2
+        ;;
+esac
+
 echo "Ready to start"
 
 # Function to run scripts

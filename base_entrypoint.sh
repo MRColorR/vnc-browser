@@ -11,6 +11,18 @@ else
     export VNC_OPTIONS="${VNC_OPTIONS} -SecurityTypes None"
 fi
 
+if [ "${THEME-light}" = "dark" ]; then
+    theme_dir=/run/vnc-browser-theme
+    # Fluxbox copies its default config over the selected rc on first launch.
+    mkdir -p "$theme_dir" "$HOME/.fluxbox"
+    sed 's/^background\.color:.*/background.color: #333333/' \
+        /usr/share/fluxbox/styles/BlueNight > "$theme_dir/BlueNight"
+    printf 'session.styleFile: %s/BlueNight\n' "$theme_dir" > "$theme_dir/fluxbox.init"
+    export GTK_THEME="${GTK_THEME:-Adwaita:dark}"
+    export WM_OPTIONS="-rc $theme_dir/fluxbox.init ${WM_OPTIONS}"
+    export XTERM_OPTIONS="-bg #333333 -fg #eeeeee ${XTERM_OPTIONS}"
+fi
+
 # Print current VNC info
 echo "Current VNC info:"
 echo "-----------------"

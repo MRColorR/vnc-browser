@@ -49,6 +49,7 @@ ENV DISPLAY=:${DEF_VNC_DISPLAY}.${DEF_VNC_SCREEN} \
     XTERM_OPTIONS=${DEF_XTERM_OPTIONS}
 
 # Install necessary packages and setup noVNC
+ARG PACKAGE_REFRESH
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
     apk update && \

@@ -181,6 +181,47 @@ open.onsuccess = () => {
             self.eventually(reported)
             self.stop_cleanly(name)
 
+    def test_dark_mode_is_opt_in(self):
+        fixture = Path(self.files.name) / "profile-test.html"
+        fixture.write_text(
+            '<!doctype html><title>Theme test</title><script>'
+            'const dark = matchMedia("(prefers-color-scheme: dark)").matches;'
+            'fetch("/theme?value=" + (dark ? "dark" : "light"));</script>',
+            encoding="utf-8",
+        )
+        for options, theme in (((), "light"), (("-e", "THEME=dark"), "dark")):
+            with self.subTest(theme=theme):
+                name = self.create(
+                    "-e", "STARTING_WEBSITE_URL=http://127.0.0.1:8765/profile-test.html",
+                    *options, fixture=fixture,
+                )
+                self.ready(name)
+                self.eventually(lambda: "/theme?value=" in docker(
+                    "exec", name, "cat", "/tmp/profile-server.log"))
+                server_log = docker("exec", name, "cat", "/tmp/profile-server.log")
+                self.assertIn(f"/theme?value={theme}", server_log)
+                def desktop_running():
+                    logs = self.logs(name)
+                    return all(f"success: {service} entered RUNNING state" in logs
+                               for service in ("fluxbox", "xterm"))
+
+                self.eventually(desktop_running)
+                if theme == "dark":
+                    settings = docker("exec", name, "cat", "/run/vnc-browser-theme/fluxbox.init",
+                                      "/run/vnc-browser-theme/BlueNight")
+                    self.assertRegex(settings, r"session\.styleFile:\s+/run/vnc-browser-theme/BlueNight")
+                    self.assertIn("background.color: #333333", settings)
+                self.stop_cleanly(name)
+
+    def test_invalid_theme_stops_startup(self):
+        for value in ("blue", ""):
+            with self.subTest(value=value):
+                name = self.create("-e", f"THEME={value}", "-e", "CUSTOMIZE=true")
+                self.assertEqual("2", docker("wait", name))
+                logs = self.logs(name)
+                self.assertIn("Expected light or dark", logs)
+                self.assertNotIn("Customization is enabled", logs)
+
     def test_stop_during_custom_script(self):
         name = self.create("-e", "CUSTOMIZE=true", scripts={
             "long.sh": "#!/bin/bash\ntrap 'exit 0' TERM\necho hook-started\nsleep 60\n",
