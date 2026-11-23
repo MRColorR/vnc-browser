@@ -41,7 +41,7 @@ This Docker image encapsulates a lightweight, VNC-accessible web browsing enviro
 
 ### Available images
 
-- `mrcolorrain/vnc-browser:alpine` (with Firefox browser)
+- `mrcolorrain/vnc-browser:alpine` (Alpine stable with Firefox)
 - `mrcolorrain/vnc-browser:debian` (with Chromium browser)
 
 <a name="quick-start-"></a>
@@ -70,7 +70,7 @@ You can run it easily using its default or by passing the appropriate environmen
       restart: unless-stopped
     ```
 After starting it then you can connect by:
-- Using a browser, you can connect to the noVNC client on `localhost:6080`
+- Using a browser, open the noVNC client at `http://localhost:6080/vnc.html` and enter the password configured for that container.
 - Using a VNC Client, you can connect to `localhost:5900`
 
 > Replace the example password before use. Keep both ports on localhost and use an SSH tunnel for remote access. Chromium runs as root with its browser sandbox disabled, so use this image for trusted sessions rather than as a security boundary.
@@ -200,6 +200,8 @@ python3 tests/test_container.py vnc-browser-test:alpine firefox
 ```
 
 The checks cover startup, restart, shutdown, custom scripts, password logging and browser profile persistence. Test containers and volumes are removed automatically.
+
+Both images are published for Linux AMD64 and ARM64. Use the regular image tags so Docker selects the image for your host. If you explicitly test Debian ARM64 under QEMU on an AMD64 host and Chromium exits while starting its GPU process, you can retry with `-e BROWSER_OPTIONS=--no-zygote`.
 
 <a name="support"></a>
 

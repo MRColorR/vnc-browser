@@ -1,5 +1,5 @@
 # Use a minimal base image
-FROM alpine:edge
+FROM alpine:3.24
 
 # Build arguments to set environment variables at build time
 ARG DEF_VNC_SCREEN=0
@@ -50,9 +50,7 @@ ENV DISPLAY=:${DEF_VNC_DISPLAY}.${DEF_VNC_SCREEN} \
 
 # Install necessary packages and setup noVNC
 ARG PACKAGE_REFRESH
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
-    echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
-    apk update && \
+RUN apk update && \
     apk upgrade && \
     apk add --no-cache \
     tini \
@@ -66,7 +64,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/reposit
     nano \
     font-freefont \
     firefox && \
-    ln -s /usr/share/novnc/vnc_lite.html /usr/share/novnc/index.html 
+    ln -s /usr/share/novnc/vnc_lite.html /usr/share/novnc/index.html
 
 # Create necessary directories for supervisor and custom entrypoints
 RUN mkdir -p /etc/supervisor.d /app/conf.d ${DEF_CUSTOM_ENTRYPOINTS_DIR}
