@@ -6,9 +6,13 @@
 
 [**🚀 Run the Docker image**](#getting-started) · [📚 Documentation](#documentation) · [🫶 Support](#support)
 
-**Leave a star ⭐ if you like this project 🙂 Thank you!**
+<p align="center">
+  <strong>Leave a star ⭐ if you like this project 🙂 Thank you!</strong>
+</p>
 
-## Overview
+<a name="overview"></a>
+
+## 🔍 Overview
 
 A Lightweight, Ready-to-Use Web Browsing Environment in Docker with VNC Access
 
@@ -29,7 +33,9 @@ This Docker image encapsulates a lightweight, VNC-accessible web browsing enviro
 - **Customizable**: Set VNC password, initial website URL, auto-start settings, etc. via environment variables to build custom environments (e.g. webkiosk)
 - **Accessible**: Access the VNC server directly or through a browser using noVNC.
 
-## Getting started
+<a name="getting-started"></a>
+
+## 🚥 Getting started
 
 <a name="available-images-"></a>
 
@@ -67,7 +73,9 @@ After starting it then you can connect by:
 - Using a browser, you can connect to the noVNC client on `localhost:6080` or from everywhere if properly configured using `HOSTIP:6080`
 - Using a VNC Client, you can connect to `localhost:5900` or from everywhere if properly configured using `HOSTIP:5900`
 
-## Documentation
+<a name="documentation"></a>
+
+## 📚 Documentation
 
 <a name="customization-"></a>
 
@@ -143,13 +151,17 @@ This image allows you to add custom scripts that will be executed when the conta
 
 ---
 
-## Contributing
+<a name="contributing"></a>
+
+## 🤝 Contributing
 
 Ideas, bug reports, documentation fixes and focused changes are welcome through this repository's collaboration channels.
 
 Please include enough context to reproduce a problem or review a change.
 
-## Support
+<a name="support"></a>
+
+## 🫶 Support
 
 **🫶 Support the project**
 
@@ -159,7 +171,9 @@ Your contributions are vital in helping to sustain the development of open-sourc
 
 Thank you for helping me keep building and sharing! 🙏 See the [supporter directory](https://github.com/MRColorR/MRColorR/blob/main/SUPPORTERS.md).
 
-## License
+<a name="license"></a>
+
+## 📄 License
 
 <a name="hash-license"></a>
 
