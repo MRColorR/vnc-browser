@@ -6,6 +6,9 @@ on:
       - "*.*.*"   # e.g., 1.0.0, 2.1.3
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   IMAGE_NAME: ${{ vars.IMAGE_NAME }}
   PLATFORMS: ${{ vars.PLATFORMS }}
@@ -77,17 +80,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Test container startup
+      - name: Test startup, shutdown and profile persistence
         run: |
-          docker run -d --rm --name test-${{ matrix.tag }} \
-            -p 5900:5900 -p 6080:6080 \
-            -e VNC_PASSWORD=testpass \
-            ${{ env.IMAGE_NAME }}:${{ matrix.tag }}
-          echo "Waiting for container to start..."
-          sleep 10
-          docker ps
-          curl -sSf http://localhost:6080 > /dev/null
-          echo "Test passed for ${{ matrix.tag }}"
+          python3 tests/test_container.py "${{ env.IMAGE_NAME }}:${{ matrix.tag }}" \
+            "${{ matrix.variant == 'debian' && 'chromium' || 'firefox' }}"
 
       # Build and push multi-arch images
       - name: Push multi-arch ${{ matrix.variant }} image

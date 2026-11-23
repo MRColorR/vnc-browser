@@ -33,6 +33,21 @@ if [ "$CUSTOMIZE" = "true" ]; then
     if [ -f /usr/local/bin/base_entrypoint.sh ]; then
         echo "Running the base entry point in the background..."
         /usr/local/bin/base_entrypoint.sh &
+        base_pid=$!
+
+        # Keep Supervisor alive and stop it when a hook fails or Docker stops us.
+        cleanup() {
+            local status=$?
+            trap - EXIT
+            if kill -0 "$base_pid" 2>/dev/null; then
+                kill -TERM "$base_pid" 2>/dev/null || true
+            fi
+            wait "$base_pid" || true
+            exit "$status"
+        }
+        trap cleanup EXIT
+        trap 'exit 143' TERM
+        trap 'exit 130' INT
         echo "Base entry point is running."
         # Wait for 10 seconds
         sleep 10
@@ -45,10 +60,9 @@ if [ "$CUSTOMIZE" = "true" ]; then
     echo "Looking for custom entry point scripts..."
     if [ -d "$CUSTOM_ENTRYPOINTS_DIR" ]; then
         echo "Found custom entrypoints directory: $CUSTOM_ENTRYPOINTS_DIR"
-        echo "$(ls -la $CUSTOM_ENTRYPOINTS_DIR)"
         # list the found scripts and run them
-        for script in "$CUSTOM_ENTRYPOINTS_DIR"/*.{sh,py}; do
-            if [ -f "$script" ]; then
+        for script in "$CUSTOM_ENTRYPOINTS_DIR"/*; do
+            if [ -f "$script" ] && [[ "$script" = *.sh || "$script" = *.py ]]; then
                 echo "Running custom entry point script: $script"
                 run_script "$script"
             fi
@@ -58,7 +72,8 @@ if [ "$CUSTOMIZE" = "true" ]; then
         exit 1
     fi
 
-    echo "Customization completed. If no additional services are defined then the container will exit."
+    echo "Customization completed. Waiting for Supervisor..."
+    wait "$base_pid"
 
 else
     echo "Customization is disabled. Running the base entry point in the foreground..."

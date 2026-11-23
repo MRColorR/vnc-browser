@@ -24,7 +24,7 @@ A Lightweight, Ready-to-Use Web Browsing Environment in Docker with VNC Access
 <a name="info-information_source"></a>
 
 VNC-Browser is a minimal, customizable, Linux-based Docker image designed to provide a lightweight environment for browsing the web via VNC.
-This Docker image encapsulates a lightweight, VNC-accessible web browsing environment built on top of Debian and Alpine Linux. It packages a VNC server, noVNC for browser-based VNC access, and the Chromium and Firefox web browsers, providing a compact solution for remotely browsing the web. Whether you're looking to browse securely or need a browsing environment within a containerized setup, VNC-Browser has you covered.
+This Docker image encapsulates a lightweight, VNC-accessible web browsing environment built on top of Debian and Alpine Linux. It packages a VNC server, noVNC for browser-based VNC access, and the Chromium and Firefox web browsers, providing a compact solution for remotely browsing the web. Use it for a dedicated browser session on a machine you control.
 
 **Key Features ✨**
 
@@ -52,7 +52,7 @@ You can run it easily using its default or by passing the appropriate environmen
 
 - ### Docker CLI 🐳
   ```bash
-  docker run -d -p 5900:5900 -p 6080:6080 --name vnc-browser -e VNC_PASSWORD="mypassword" mrcolorrain/vnc-browser:debian
+  docker run -d -p 127.0.0.1:5900:5900 -p 127.0.0.1:6080:6080 --name vnc-browser -e VNC_PASSWORD="mypassword" mrcolorrain/vnc-browser:debian
   ```
 
 - ### Docker Compose 🐳
@@ -63,15 +63,17 @@ You can run it easily using its default or by passing the appropriate environmen
       container_name: vnc-browser
       image: mrcolorrain/vnc-browser:debian
       ports:
-        - "5900:5900"
-        - "6080:6080"
+        - "127.0.0.1:5900:5900"
+        - "127.0.0.1:6080:6080"
       environment:
         VNC_PASSWORD: "mypassword"
       restart: unless-stopped
     ```
 After starting it then you can connect by:
-- Using a browser, you can connect to the noVNC client on `localhost:6080` or from everywhere if properly configured using `HOSTIP:6080`
-- Using a VNC Client, you can connect to `localhost:5900` or from everywhere if properly configured using `HOSTIP:5900`
+- Using a browser, you can connect to the noVNC client on `localhost:6080`
+- Using a VNC Client, you can connect to `localhost:5900`
+
+> Replace the example password before use. Keep both ports on localhost and use an SSH tunnel for remote access. Chromium runs as root with its browser sandbox disabled, so use this image for trusted sessions rather than as a security boundary.
 
 <a name="documentation"></a>
 
@@ -81,7 +83,7 @@ After starting it then you can connect by:
 
 ### Customization
 
-You can customize the settings of the Docker container by passing environment variables during the Docker run command. All the current settings will be printed in the container logs. Here are some examples:
+You can customize the settings of the Docker container by passing environment variables during the Docker run command. Startup settings are printed in the container logs; the VNC password is hidden. Here are some examples:
 - Setting the initial website URL: `STARTING_WEBSITE_URL="https://www.google.com"`
 - Setting the VNC password: `VNC_PASSWORD="mypassword"`
 - Setting the resolution: `VNC_RESOLUTION="1280x720"`
@@ -125,8 +127,33 @@ You can customize the settings of the Docker container by passing environment va
 
 - Example:
 ```sh
-docker run -d -p 5900:5900 -p 6080:6080 -e STARTING_WEBSITE_URL="https://www.bing.com" -e VNC_PASSWORD="mypassword" -e VNC_RESOLUTION="1920x1080" -e AUTO_START_BROWSER=true -e AUTO_START_XTERM=true mrcolorrain/vnc-browser:alpine
+docker run -d -p 127.0.0.1:5900:5900 -p 127.0.0.1:6080:6080 -e STARTING_WEBSITE_URL="https://www.bing.com" -e VNC_PASSWORD="mypassword" -e VNC_RESOLUTION="1920x1080" -e AUTO_START_BROWSER=true -e AUTO_START_XTERM=true mrcolorrain/vnc-browser:alpine
 ```
+
+### Keep your browser profile 💾
+
+Mount a named volume to keep bookmarks, cookies and logins when recreating a container:
+
+| Image | Profile directory |
+|-------|-------------------|
+| Debian (Chromium) | `/root/.config/chromium` |
+| Alpine (Firefox) | `/root/.config/mozilla` |
+
+If you already have a Firefox profile volume at `/root/.mozilla`, keep its existing mount.
+
+For Chromium, keep the same hostname when recreating the container so its profile lock recognizes the device:
+
+```bash
+docker run -d --name vnc-browser --hostname vnc-browser \
+  -p 127.0.0.1:5900:5900 -p 127.0.0.1:6080:6080 \
+  -e VNC_PASSWORD="mypassword" \
+  -v browser-profile:/root/.config/chromium \
+  mrcolorrain/vnc-browser:debian
+```
+
+In Compose, set `hostname: vnc-browser` and mount the volume under `volumes`. Use a separate profile volume for each browser instance. Stop the old container before reusing its profile, and use `docker stop` to let the browser close cleanly. This preserves saved browser data, not a running process or unsaved form input.
+
+If Chromium reports that the profile is in use, first check that no other container is using the volume. Do not delete profile locks while a browser is running.
 
 <a name="adding-custom-entrypoints-"></a>
 
@@ -138,7 +165,7 @@ This image allows you to add custom scripts that will be executed when the conta
 - Use this Image as a Base for Your Custom Image or Mount a Volume and Add Your Scripts to the custom entrypoints Directory:
   - Option 1: Create a new image using this image as the base and copy your custom scripts in the custom entrypoints directory.
   - Option 2: Mount a volume containing your custom scripts to the /app/custom_entrypoints_scripts directory.
-    - Example:`docker run -d -p 5900:5900 -p 6080:6080 -v /path/to/your/scripts:/app/custom_entrypoints_scripts -e CUSTOMIZE=true mrcolorrain/vnc-browser:debian`
+    - Example: `docker run -d -p 127.0.0.1:5900:5900 -p 127.0.0.1:6080:6080 -v /path/to/your/scripts:/app/custom_entrypoints_scripts -e CUSTOMIZE=true -e VNC_PASSWORD="mypassword" mrcolorrain/vnc-browser:debian`
 - More info on custom entrypoints:
   - To customize the image place your .sh (bash) or .py (Python) scripts in the directory and Set the environment variable `CUSTOMIZE=true` to enable custom scripts execution.
     - Ensure your scripts have the necessary permissions (e.g.: make scripts executable).
@@ -149,6 +176,8 @@ This image allows you to add custom scripts that will be executed when the conta
   - Logs:
     - The execution and output of these scripts can be reviewed in the container logs.
 
+Custom scripts run after services start, following a 10-second startup delay. When they finish, the container keeps running until Supervisor stops. A failed script stops startup with a nonzero exit code. Use scripts that finish, rather than long-running foreground services; manage additional services through Supervisor. Shell scripts must use Unix (LF) line endings. Python hooks require Python 3 in the image.
+
 ---
 
 <a name="contributing"></a>
@@ -158,6 +187,17 @@ This image allows you to add custom scripts that will be executed when the conta
 Ideas, bug reports, documentation fixes and focused changes are welcome through this repository's collaboration channels.
 
 Please include enough context to reproduce a problem or review a change.
+
+To run the Docker integration checks locally (Python 3 and Docker required):
+
+```bash
+docker build -f debian.dockerfile -t vnc-browser-test:debian .
+python3 tests/test_container.py vnc-browser-test:debian chromium
+docker build -f alpine.dockerfile -t vnc-browser-test:alpine .
+python3 tests/test_container.py vnc-browser-test:alpine firefox
+```
+
+The checks cover startup, restart, shutdown, custom scripts, password logging and browser profile persistence. Test containers and volumes are removed automatically.
 
 <a name="support"></a>
 

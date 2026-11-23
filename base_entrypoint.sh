@@ -4,7 +4,8 @@ set -e
 # Add password to vnc options
 if [ -n "${VNC_PASSWORD}" ]; then
     mkdir -p ~/.vnc
-    echo "${VNC_PASSWORD}" | vncpasswd -f > ~/.vnc/passwd
+    (umask 077; printf '%s\n' "${VNC_PASSWORD}" | vncpasswd -f > ~/.vnc/passwd)
+    chmod 600 ~/.vnc/passwd
     export VNC_OPTIONS="${VNC_OPTIONS} -SecurityTypes VncAuth -PasswordFile /root/.vnc/passwd"
 else
     export VNC_OPTIONS="${VNC_OPTIONS} -SecurityTypes None"
@@ -16,7 +17,11 @@ echo "-----------------"
 echo "VNC Screen: ${VNC_SCREEN}"
 echo "VNC Display: ${VNC_DISPLAY}"
 echo "VNC resolution: ${VNC_RESOLUTION}"
-echo "VNC password: ${VNC_PASSWORD}"
+if [ -n "${VNC_PASSWORD}" ]; then
+    echo "VNC password: configured"
+else
+    echo "VNC password: not configured (authentication disabled)"
+fi
 echo "VNC Port: ${VNC_PORT}"
 echo "NOVNC Websockify Port: ${NOVNC_WEBSOCKIFY_PORT}"
 

@@ -88,5 +88,5 @@ RUN chmod +x /usr/local/bin/base_entrypoint.sh /usr/local/bin/customizable_entry
 EXPOSE ${VNC_PORT} ${NOVNC_WEBSOCKIFY_PORT}
 
 # Set tini as the entrypoint and the custom script as the command
-ENTRYPOINT ["/usr/bin/tini", "--"]
+ENTRYPOINT ["/usr/bin/tini", "-g", "--"]
 CMD ["/usr/local/bin/customizable_entrypoint.sh"]
